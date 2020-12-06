@@ -1,5 +1,6 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Card ,Button} from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 import { Link} from 'react-router-dom'
 import { useDispatch , useSelector} from 'react-redux'
 import { deleteMyPost } from '../actions/postAction'
@@ -13,6 +14,8 @@ const dispatch = useDispatch();
 
  const deletePost = useSelector((state) => state.deletePost)
   const { loading, error, success } = deletePost
+
+
 
  const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
@@ -58,6 +61,11 @@ const dispatch = useDispatch();
             >
            <i className='fas fa-trash' />
            </Button>
+           <LinkContainer to={`/post/${post._id}/edit`}>
+                      <Button variant='light' className='btn-sm'>
+                        <i className='fas fa-edit'></i>
+                      </Button>
+           </LinkContainer>
 
       </>
     )

@@ -9,6 +9,7 @@ import RegisterScreen from './screens/RegisterScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import AddPostScreen from './screens/AddPostScreen'
 import SinglePost from './screens/SinglePost'
+import EditPostScreen from './screens/EditPostScreen'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
     <Route exact path="/login" component={LoginScreen} />
     <Route exact path="/register" component={RegisterScreen} />
     <Route exact path="/post/:id" component={SinglePost} />
+    <Route path='/post/:id/edit' component={EditPostScreen} />
     </Container>
     </main>
     </Router>

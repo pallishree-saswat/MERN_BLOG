@@ -6,36 +6,53 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
-import { createPost, addPost}  from '../actions/postAction'
+import { updatePost,PostDetails }  from '../actions/postAction'
+import { POST_UPDATE_RESET } from '../constants/postConstants'
 
 const AddPostScreen = ({match,history}) => {
+
+    const postId = match.params.id
 
   const dispatch = useDispatch()
  
  const [title, setTitle] = useState('');
  const [ description, setDescription] = useState('');
 
-  const postCreate= useSelector((state) => state.postCreate)
+ const  getDetailPost = useSelector((state) => state. getDetailPost )
+
+ const { post} =  getDetailPost
+
+  const postUpdate= useSelector((state) => state.postUpdate)
   const {
-    loading: loading,
-    error: error,
-    success: success,post
-  } = postCreate
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = postUpdate
   
 
-   useEffect(() => {
-    if (success) {
-    
+  useEffect(() => {
+    if (successUpdate) {
+      dispatch({ type: POST_UPDATE_RESET })
       history.push('/')
-    } 
-  }, [dispatch, history, success]) 
+    } else {
+      if ( post._id !== postId) {
+        dispatch(PostDetails(postId))
+      } else {
+        setTitle(post.title)
+       
+        setDescription(post.description)
+      }
+    }
+  }, [dispatch, history, postId, post, successUpdate])
 
    const submitHandler = (e) => {
     console.log("pppp")
     e.preventDefault()
-  
-
-    dispatch(createPost({title,description}))
+   dispatch(
+    updatePost(
+        {_id : postId, title,description}
+        
+        ))
   }
     return (
     <>
@@ -43,7 +60,7 @@ const AddPostScreen = ({match,history}) => {
         Go Back
       </Link>
       <FormContainer>
-        <h1>Add Post</h1>
+        <h1>Edit Post</h1>
         
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
@@ -67,7 +84,7 @@ const AddPostScreen = ({match,history}) => {
             </Form.Group>
 
             <Button type='submit' variant='primary'>
-              Create Post
+              Update Post
             </Button>
           </Form>
       

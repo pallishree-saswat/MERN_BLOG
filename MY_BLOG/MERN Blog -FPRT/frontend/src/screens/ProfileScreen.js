@@ -33,13 +33,19 @@ const ProfileScreen = ({ location, history }) => {
  const deletePost = useSelector((state) => state.deletePost)
   const { loading:loadingDelete, error:errorDelete, success:successDelete } = deletePost
 
+  const postCreate= useSelector((state) => state.postCreate)
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,post
+  } = postCreate
 
 
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
     } else {
-      if ( !user || !user.name || success || successDelete ) {
+      if ( !user || !user.name || success || successDelete   ) {
        dispatch({ type : USER_UPDATE_PROFILE_RESET})
        
         dispatch(getUserDetails('profile'))
@@ -50,7 +56,7 @@ const ProfileScreen = ({ location, history }) => {
         setEmail(user.email)
       }
     }
-  }, [dispatch, history, userInfo, user, success,successDelete])
+  }, [dispatch, history, userInfo, user, success,successDelete,successCreate])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -119,6 +125,10 @@ const ProfileScreen = ({ location, history }) => {
         </Form>
       </Col>
       <Col md={9}>
+  
+       
+        {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+        {successDelete && <Message variant='success'>Post Deleted</Message>}
         <h2>My Posts</h2>
            {user.posts && user.posts.map((post) => (
           <Mypost key={post._id} post={post} postId={post._id}  />
