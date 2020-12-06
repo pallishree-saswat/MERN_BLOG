@@ -14,7 +14,13 @@ POST_LIST_RESET,
  POST_CREATE_FAIL,
  POST_UPDATE_SUCCESS,
  POST_UPDATE_REQUEST,
- POST_UPDATE_FAIL
+ POST_UPDATE_FAIL,
+ POST_LIKE_REQUEST,
+ POST_LIKE_SUCCESS,
+ POST_LIKE_FAIL,
+ POST_UNLIKE_REQUEST,
+ POST_UNLIKE_SUCCESS,
+ POST_UNLIKE_FAIL
 } from '../constants/postConstants'
 
 import axios from 'axios'
@@ -173,3 +179,55 @@ export const deleteMyPost = id => async( dispatch,getState )=> {
     }
   }
  
+
+  // Add like
+export const addLike = id => async (getState, dispatch )=> {
+  try {
+    dispatch({
+      type: POST_LIKE_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+    const res = await axios.put(`api/post/like/${id}`);
+
+    dispatch({
+      type: POST_LIKE_SUCCESS,
+      payload: { id, likes: res.data }
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_LIKE_FAIL,
+
+    });
+  }
+};
+
+
+// Remove like
+export const removeLike = id => async dispatch => {
+  try {
+    dispatch({
+      type: POST_UNLIKE_REQUEST,
+    })
+    const res = await axios.put(`api/post/unlike/${id}`);
+
+    dispatch({
+      type:POST_UNLIKE_SUCCESS,
+      payload: { id, likes: res.data }
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_UNLIKE_FAIL,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};

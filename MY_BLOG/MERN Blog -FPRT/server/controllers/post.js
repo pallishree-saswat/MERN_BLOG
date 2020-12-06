@@ -133,4 +133,66 @@ const myPost = asyncHandler(async(req,res) => {
 })
 
 
-  export { getAllPost,singlePost,createPost,deletePost,updatePost ,myPost}
+
+ //@route PUT api/posts/like/:id
+//description like a post 
+//@access private
+const likePost = asyncHandler(async (req,res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    //check if the post has already been liked
+    if(post.likes.filter(like => like.user.toString() === req.user.id).length > 0) 
+    {
+       return res.status(400).json({msg :" post already liked"})
+    }
+
+    post.likes.unshift({ user : req.user.id})
+
+    await post.save();
+    res.json(post.likes)
+
+
+  } catch (err) {
+      console.log(err.message)
+  res.status(500).send('Server error')        
+  }
+})
+
+
+//@route PUT api/posts/unlike/:id
+//description like a post 
+//@access private
+const unlikePost= asyncHandler(async (req,res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    //check if the post has already been liked
+    if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0) 
+    {
+       return res.status(400).json({msg :" posthas not yet been liked"})
+    }
+
+   //get remove index 
+   const removeIndex = post.likes
+   .map(like => like.user.toString())
+   .indexOf(req.user.id);
+
+   post.likes.splice(removeIndex, 1)
+
+    await post.save();
+    
+    res.json(post.likes)
+
+
+  } catch (err) {
+      console.log(err.message)
+  res.status(500).send('Server error')        
+  }
+})
+
+
+
+
+
+  export { getAllPost,singlePost,createPost,deletePost,updatePost ,myPost, likePost, unlikePost}

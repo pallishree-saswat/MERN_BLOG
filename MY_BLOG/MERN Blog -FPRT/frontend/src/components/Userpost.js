@@ -3,25 +3,24 @@ import { Card ,Button} from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Link} from 'react-router-dom'
 import { useDispatch , useSelector} from 'react-redux'
-import { deleteMyPost } from '../actions/postAction'
 
-const Mypost = ({post}) => {
+
+const Userpost = ({post}) => {
 
 const dispatch = useDispatch();
 
- const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
+const userLogin = useSelector((state) => state.userLogin)
+const { userInfo } = userLogin
 
- const deletePost = useSelector((state) => state.deletePost)
-  const { loading, error, success } = deletePost
+  
+  const userDetails = useSelector((state) => state.userDetails)
+  const { loading, error, user } = userDetails
 
 
 
- const deleteHandler = (id) => {
-    if (window.confirm('Are you sure')) {
-  dispatch(deleteMyPost(id)) 
-    }
-  }
+
+
+
     return (
             <>
      
@@ -29,7 +28,7 @@ const dispatch = useDispatch();
         
             <Card.Body>
             
-                <Card.Header>{userInfo.name} </Card.Header>
+                <Card.Header>{user.name} </Card.Header>
        
              
                 <Link to={`/post/${post._id}`}>
@@ -55,21 +54,11 @@ const dispatch = useDispatch();
              <i className='fas fa-thumbs-up' />{' '}
             <span>0 likes </span>
          </Button>      {'   '}
-           <Button
-           onClick={() => deleteHandler(post._id)}
-              type='button'
-              className='btn btn-danger'
-            >
-           <i className='fas fa-trash' />
-           </Button>
-           <LinkContainer to={`/post/${post._id}/edit`}>
-                      <Button variant='light' className='btn-sm'>
-                        <i className='fas fa-edit'></i>
-                      </Button>
-           </LinkContainer>
+          
+
 
       </>
     )
 }
 
-export default Mypost
+export default Userpost

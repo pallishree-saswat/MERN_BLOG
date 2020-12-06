@@ -12,9 +12,9 @@ const dispatch = useDispatch();
         
 
           <Card.Body>
-             
-                <Card.Header> posted by {userInfo.name} </Card.Header>
-               
+          <Link to={`/user/${post.user}`}>
+                <Card.Header> posted by {post.name} </Card.Header>
+                </Link>
                 <Link to={`/post/${post._id}`}>
                   <Card.Title as="div">
                   <h3>    <strong> {post.title }</strong> </h3>

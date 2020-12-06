@@ -1,7 +1,7 @@
 import {createStore , combineReducers , applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
-import {postListReducer ,postDetailsReducer,postDeleteReducer,postCreateReducer,postUpdateReducer} from './reducers/postReducer'
+import {postListReducer ,postDetailsReducer,postDeleteReducer,postCreateReducer,postUpdateReducer,postLikeReducer} from './reducers/postReducer'
 import { userLoginReducer , userRegisterReducer, userDetailsReducer , userUpdateProfileReducer, userDeleteReducer, userListReducer, userUpdateReducer} from './reducers/userReducer'
 
 
@@ -11,6 +11,7 @@ const reducer = combineReducers({
   deletePost :postDeleteReducer,
   postCreate: postCreateReducer,
   postUpdate:postUpdateReducer,
+  likePost:postLikeReducer,
     userLogin : userLoginReducer,
     userRegister : userRegisterReducer,
     userDetails: userDetailsReducer,

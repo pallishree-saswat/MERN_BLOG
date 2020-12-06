@@ -1,7 +1,9 @@
 import React,{useEffect} from 'react'
 import { Card ,Button} from 'react-bootstrap'
-import { useDispatch , useSelector} from 'react-redux'
+import { useDispatch , useSelector,connect} from 'react-redux'
 import { Link} from 'react-router-dom'
+import {addLike} from '../actions/postAction'
+
 
 const PostItem = ({post}) => {
 
@@ -16,16 +18,17 @@ const userLogin = useSelector((state) => state.userLogin)
     <Card className="my-3 p-3 rounded" >
          <Card.Body>
               <Link to='/'>
-                <Card.Header> user </Card.Header>
+                <Card.Header> posted by {userInfo.name} </Card.Header>
+                </Link>
                 <Link to={`/post/${post._id}`}>
                   <Card.Title as="div">
                       <strong> {post.title }</strong>
                   </Card.Title>
-                  </Link>
+                
                   <Card.Text>
-                 Some quick example text to build on the card title and make up the bulk
-                 of the card's content.
+                 {post.description}
                  </Card.Text>
+                 <p> posted on {post.date} </p>
 
               </Link>
 
@@ -34,12 +37,12 @@ const userLogin = useSelector((state) => state.userLogin)
           </Card.Body>
 
       </Card>
-     <Button 
+     <Button onClick={() => addLike(post._id)}
           type='button'
             className='btn btn-light' >
           
              <i className='fas fa-thumbs-up' />{' '}
-            <span>0 likes </span>
+             <span>{post.likes.length > 0 && <span>{post.likes.length}</span>}</span>
      </Button>{'   '}
     <Button 
      type='button'
@@ -47,15 +50,7 @@ const userLogin = useSelector((state) => state.userLogin)
           
      <i className='fas fa-thumbs-down' />{' '}
             
-     </Button> { '     '}
-   
-             <Button
-           
-              type='button'
-              className='btn btn-danger'
-             >
-              <i className='fas fa-trash' />
-            </Button>
+     </Button> 
 
   
            

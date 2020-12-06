@@ -20,7 +20,7 @@ const AddPostScreen = ({match,history}) => {
 
  const  getDetailPost = useSelector((state) => state. getDetailPost )
 
- const { post} =  getDetailPost
+ const {loading, error, post} =  getDetailPost
 
   const postUpdate= useSelector((state) => state.postUpdate)
   const {
@@ -46,7 +46,7 @@ const AddPostScreen = ({match,history}) => {
   }, [dispatch, history, postId, post, successUpdate])
 
    const submitHandler = (e) => {
-    console.log("pppp")
+    console.log("post updated")
     e.preventDefault()
    dispatch(
     updatePost(
@@ -56,7 +56,7 @@ const AddPostScreen = ({match,history}) => {
   }
     return (
     <>
-      <Link to='/' className='btn btn-light my-3'>
+      <Link to='/profile' className='btn btn-light my-3'>
         Go Back
       </Link>
       <FormContainer>
