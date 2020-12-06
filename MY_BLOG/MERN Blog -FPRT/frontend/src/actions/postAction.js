@@ -20,7 +20,10 @@ POST_LIST_RESET,
  POST_LIKE_FAIL,
  POST_UNLIKE_REQUEST,
  POST_UNLIKE_SUCCESS,
- POST_UNLIKE_FAIL
+ POST_UNLIKE_FAIL,
+ ADD_COMMENT,
+
+ REMOVE_COMMENT
 } from '../constants/postConstants'
 
 import axios from 'axios'
@@ -181,12 +184,9 @@ export const deleteMyPost = id => async( dispatch,getState )=> {
  
 
   // Add like
-export const addLike = id => async (getState, dispatch )=> {
+export const addLike = (id) => async (getState, dispatch )=> {
   try {
-    dispatch({
-      type: POST_LIKE_REQUEST,
-    })
-
+ 
     const {
       userLogin: { userInfo },
     } = getState()
@@ -204,10 +204,8 @@ export const addLike = id => async (getState, dispatch )=> {
       payload: { id, likes: res.data }
     });
   } catch (err) {
-    dispatch({
-      type: POST_LIKE_FAIL,
-
-    });
+console.log(err)
+dispatch({type : POST_LIKE_FAIL})
   }
 };
 
@@ -227,6 +225,44 @@ export const removeLike = id => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_UNLIKE_FAIL,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Add comment
+export const addComment = (postId, formData) => async dispatch => {
+  try {
+    const res = await axios.post(`api/post/comment/${postId}`, formData);
+
+    dispatch({
+      type: ADD_COMMENT,
+      payload: res.data
+    });
+
+  } catch (err) {
+    dispatch({
+      type: POST_DELETE_SUCCESS,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+
+// Delete comment
+export const deleteComment = (postId, commentId) => async dispatch => {
+  try {
+    await axios.delete(`api/post/comment/${postId}/${commentId}`);
+
+    dispatch({
+      type: REMOVE_COMMENT,
+      payload: commentId
+    });
+
+   
+  } catch (err) {
+    dispatch({
+      type: POST_DELETE_SUCCESS,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }

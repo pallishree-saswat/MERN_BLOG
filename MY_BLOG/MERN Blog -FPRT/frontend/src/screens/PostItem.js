@@ -5,10 +5,16 @@ import { Link} from 'react-router-dom'
 import {addLike} from '../actions/postAction'
 
 
+
 const PostItem = ({post}) => {
+  const dispatch = useDispatch()
 
 const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+
+  const likePost = useSelector((state) => state.likePost)  
+
+const { posts  } = likePost
 
  
 
@@ -18,11 +24,11 @@ const userLogin = useSelector((state) => state.userLogin)
     <Card className="my-3 p-3 rounded" >
          <Card.Body>
               <Link to='/'>
-                <Card.Header> posted by {userInfo.name} </Card.Header>
+                <Card.Header> posted by {post.name} </Card.Header>
                 </Link>
-                <Link to={`/post/${post._id}`}>
+             
                   <Card.Title as="div">
-                      <strong> {post.title }</strong>
+                     <h3><strong> {post.title }</strong></h3> 
                   </Card.Title>
                 
                   <Card.Text>
@@ -30,19 +36,15 @@ const userLogin = useSelector((state) => state.userLogin)
                  </Card.Text>
                  <p> posted on {post.date} </p>
 
-              </Link>
-
-           
-
-          </Card.Body>
+   </Card.Body>
 
       </Card>
-     <Button onClick={() => addLike(post._id)}
+     <Button onClick={() => dispatch(addLike(post._id))}
           type='button'
-            className='btn btn-light' >
+          className='btn btn-light' >
           
-             <i className='fas fa-thumbs-up' />{' '}
-             <span>{post.likes.length > 0 && <span>{post.likes.length}</span>}</span>
+        <i className='fas fa-thumbs-up' />{' '}
+        <span>{post.likes.length > 0 && <span>{post.likes.length}</span>}</span>
      </Button>{'   '}
     <Button 
      type='button'
@@ -52,10 +54,10 @@ const userLogin = useSelector((state) => state.userLogin)
             
      </Button> 
 
-  
+     
            
       </>
     )
 }
 
-export default PostItem
+export default connect(null,{addLike})(PostItem)

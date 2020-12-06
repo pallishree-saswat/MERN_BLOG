@@ -134,7 +134,7 @@ const myPost = asyncHandler(async(req,res) => {
 
 
 
- //@route PUT api/posts/like/:id
+//@route PUT api/posts/like/:id
 //description like a post 
 //@access private
 const likePost = asyncHandler(async (req,res) => {
@@ -170,7 +170,7 @@ const unlikePost= asyncHandler(async (req,res) => {
     //check if the post has already been liked
     if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0) 
     {
-       return res.status(400).json({msg :" posthas not yet been liked"})
+       return res.status(400).json({msg :" post has not yet been liked"})
     }
 
    //get remove index 
@@ -192,7 +192,77 @@ const unlikePost= asyncHandler(async (req,res) => {
 })
 
 
+//@route POST api/posts/comment/:id
+//description comment on a post 
+//@access private
+const addComment =  async (req,res) => {
+
+try {
+  const user = await User.findById(req.user.id).select('-password');
+  const post = await Post.findById(req.params.id);
+  
+  const newComment = {
+      text : req.body.text,
+      name: user.name,
+      pic: user.pic,
+      user:req.user.id
+  }
+   post.comments.unshift(newComment)
+   
+   await post.save();
+
+  res.json(post.comments)
+
+
+} catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error')
+    
+}
+
+}
+
+//@route POST api/posts/comment/:id/:comment_id
+//description delete comment
+//@access private
+
+const deleteComment = async (req, res) => {
+  try {
+      const post = await Post.findById(req.params.id);
+   
+
+      //Pull out comment
+      const comment = post.comments.find(comment => comment.id === req.params.comment_id)
+
+     //make sure comment exists
+     if(!comment) {
+         return res.status(404).json({msg :' Comments does not exist'})
+     }
+   //check user
+   if(comment.user.toString() !== req.user.id) {
+       return res.status(401).json({msg : 'User not found'})
+   }
+
+         //get remove index 
+   const removeIndex = post.comments
+   .map(comment => comment.user.toString())
+   .indexOf(req.user.id);
+
+   post.comments.splice(removeIndex, 1)
+   
+   await post.save();
+
+   res.json(post.comments)
+
+  } catch (err) {
+      console.log(err.message);
+      res.status(500).send('Server error ')
+      
+  }
+}
 
 
 
-  export { getAllPost,singlePost,createPost,deletePost,updatePost ,myPost, likePost, unlikePost}
+
+
+  export { getAllPost,singlePost,createPost,deletePost,updatePost ,myPost, likePost, unlikePost, addComment, deleteComment}

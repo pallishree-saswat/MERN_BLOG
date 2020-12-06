@@ -6,6 +6,8 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { Link } from 'react-router-dom'
 import { PostDetails }  from '../actions/postAction'
+import CommentForm from '../components/CommentForm'
+import AllComments from '../components/AllComments'
 
 const SinglePost = ({history,match}) => {
   const dispatch = useDispatch()
@@ -42,6 +44,13 @@ return (
 <Row>
 <Col md={9}>
 <PostItem  post={post}/>
+<CommentForm postId={post._id} />
+      <div className="comments">
+        {post.comments.map((comment) => (
+          <AllComments key={comment._id} comment={comment} postId={post._id} />
+        ))}
+      </div>
+  
 </Col>
 </Row>
 </>

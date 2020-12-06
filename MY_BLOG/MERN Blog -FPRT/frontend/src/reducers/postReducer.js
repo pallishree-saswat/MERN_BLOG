@@ -22,7 +22,9 @@ POST_LIST_RESET,
  POST_LIKE_FAIL,
  POST_UNLIKE_REQUEST,
  POST_UNLIKE_SUCCESS,
- POST_UNLIKE_FAIL
+ POST_UNLIKE_FAIL,
+ ADD_COMMENT,
+ REMOVE_COMMENT
 } from '../constants/postConstants'
 
 
@@ -97,13 +99,12 @@ export const postDeleteReducer = (state = {}, action) => {
     }
   }
 
-  export const postLikeReducer = (state = { post: {} }, action) => {
+  export const postLikeReducer = (state = {posts :{} } , action) => {
     switch (action.type) {
-      case POST_LIKE_REQUEST:
-        return { loading: true }
+  
         case POST_LIKE_SUCCESS:
           return {
-            ...state,
+            success : true,
             posts: state.posts.map(post =>
               post._id === action.payload.id ? { ...post, likes: action.payload.likes } : post
             ),
@@ -111,9 +112,10 @@ export const postDeleteReducer = (state = {}, action) => {
           };
       case POST_LIKE_FAIL:
         return { loading: false, error: action.payload }
-      case POST_UPDATE_RESET:
-        return { post: {} }
+
       default:
         return state
     }
   }
+
+
