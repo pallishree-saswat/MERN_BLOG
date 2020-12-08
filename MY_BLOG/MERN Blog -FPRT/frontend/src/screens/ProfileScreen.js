@@ -129,7 +129,7 @@ const ProfileScreen = ({ location, history }) => {
        
         {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
         {successDelete && <Message variant='success'>Post Deleted</Message>}
-        <h2>My Posts</h2>
+        <h2>My Posts {user.posts ? user.posts.length : '0 post'}  </h2>
            {user.posts && user.posts.map((post) => (
           <Mypost key={post._id} post={post} postId={post._id}  />
    ))}

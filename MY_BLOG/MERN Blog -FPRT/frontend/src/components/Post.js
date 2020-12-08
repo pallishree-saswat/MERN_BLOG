@@ -1,13 +1,23 @@
 import React from 'react'
-import { Card } from 'react-bootstrap'
+import { Card,Button } from 'react-bootstrap'
 import { useDispatch , useSelector} from 'react-redux'
 import { Link} from 'react-router-dom'
+
+/* import {addLike} from '../actions/postAction' */
 
 const Post = ({post}) => {
 const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+
+/*   const likeHandler = () => {
+    dispatch(addLike(post._id))
+    console.log(post._id)
+  } */
+
+
     return (
+      <>
       <Card className="my-3 p-3 rounded" >
         
 
@@ -26,13 +36,33 @@ const dispatch = useDispatch();
 
              
              <Link to={`/post/${post._id}`} className='btn btn-primary'>
-            Discussion{' '}
-            
+            Discussion  {'   '}
+            {post.comments.length > 0 && (
+              <span className='comment-count'>{post.comments.length}</span>
+            )}
           </Link>
           
 
           </Card.Body>
       </Card>
+     
+   {/* <Button onClick={likeHandler}
+       type='button'
+       className='btn btn-light' >
+       
+     <i className='fas fa-thumbs-up' />{' '}
+     <span>{post.likes.length > 0 && <span>{post.likes.length}</span>}</span>
+  </Button>
+
+   {'   '}
+ <Button 
+  type='button'
+   className='btn btn-light' >
+       
+  <i className='fas fa-thumbs-down' />{' '}
+         
+  </Button>  */}
+  </>
     )
 }
 

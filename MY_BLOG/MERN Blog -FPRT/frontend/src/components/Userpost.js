@@ -47,13 +47,7 @@ const { userInfo } = userLogin
           </Card.Body>
 
       </Card>
-         <Button 
-          type='button'
-            className='btn btn-light' >
-          
-             <i className='fas fa-thumbs-up' />{' '}
-            <span>0 likes </span>
-         </Button>      {'   '}
+           
           
 
 

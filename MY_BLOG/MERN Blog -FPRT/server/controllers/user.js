@@ -3,6 +3,25 @@ import User from '../model/User.js'
 import generateToken from '../utils/generateToken.js'
 
 
+//@route GET api/auth
+//description auth route
+//@access public
+const loadUser = async(req,res) => {
+
+  try {
+      const user = await User.findById(req.user.id).select('-password')
+      console.log(user)
+      res.json(user)
+      
+  } catch (err) {
+      console.log(err.message);
+      res.status(500).send('server error')
+      
+  }
+  
+};
+
+
 //user login controoler
 const authUser  = asyncHandler(async(req,res) => {
     const { email, password } = req.body
@@ -162,4 +181,4 @@ const updateUser = asyncHandler(async (req, res) => {
 
 
 
-export { authUser, registerUser , getUserProfile , updateUserProfile, getUsers, deleteUser ,getUserById,updateUser}
+export { authUser, registerUser , getUserProfile , updateUserProfile, getUsers, deleteUser ,getUserById,updateUser,loadUser}

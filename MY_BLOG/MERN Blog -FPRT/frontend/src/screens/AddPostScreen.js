@@ -1,4 +1,4 @@
-
+import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
@@ -15,6 +15,7 @@ const AddPostScreen = ({match,history}) => {
  const [title, setTitle] = useState('');
  const [ description, setDescription] = useState('');
 
+
   const postCreate= useSelector((state) => state.postCreate)
   const {
     loading: loading,
@@ -29,6 +30,13 @@ const AddPostScreen = ({match,history}) => {
       history.push('/')
     } 
   }, [dispatch, history, success]) 
+
+
+
+
+
+
+
 
    const submitHandler = (e) => {
     console.log("pppp")
@@ -65,7 +73,7 @@ const AddPostScreen = ({match,history}) => {
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>
-
+            
             <Button type='submit' variant='primary'>
               Create Post
             </Button>

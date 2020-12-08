@@ -24,7 +24,11 @@ POST_LIST_RESET,
  POST_UNLIKE_SUCCESS,
  POST_UNLIKE_FAIL,
  ADD_COMMENT,
- REMOVE_COMMENT
+ ADD_COMMENT_REQUEST,
+ ADD_COMMENT_FAIL,
+ REMOVE_COMMENT,
+ DELETE_COMMENT_FAIL,
+ REMOVE_COMMENT_REQUEST
 } from '../constants/postConstants'
 
 
@@ -118,4 +122,48 @@ export const postDeleteReducer = (state = {}, action) => {
     }
   }
 
+ 
+  
+  export const addCommentReducer = (state ={ posts: [], post:null, loading:true,success:false, error:{}}, action) => {
+    const { type, payload } = action;
+    switch (type) {
+      case ADD_COMMENT_REQUEST:
+        return { loading : true }
 
+    case ADD_COMMENT:
+        return {
+          ...state,
+          post: { ...state.post, comments: payload },
+          loading: false,
+          success: true
+        };
+     case ADD_COMMENT_FAIL:
+      return { loading: false, error: action.payload }
+      default:
+        return state;
+    }
+  }
+
+  export const deleteCommentReducer = (state ={ posts: [], post:null, loading:true,success:false, error:{}}, action) => {
+    const { type, payload } = action;
+    switch (type) {
+      case REMOVE_COMMENT_REQUEST :
+        return { loading : true}
+      case REMOVE_COMMENT:
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            comments: state.post.comments.filter(
+              comment => comment._id !== payload
+            )
+          },
+          loading: false,
+          success: true
+        };
+      case DELETE_COMMENT_FAIL :
+        return { loading: false, error: action.payload }
+      default:
+        return state;
+    }
+  }

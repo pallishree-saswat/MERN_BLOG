@@ -129,3 +129,17 @@ import {
         return state
     }
   }
+
+  export const userLoadReducer = (state = { user: {} }, action) => {
+    switch (action.type) {
+      case 'USER_LOAD_REQUEST':
+        return { loading: true }
+      case "USER_LOADED":
+        return { loading: false,user : action.payload}
+      case 'USER_LOAD_FAIL':
+        return { loading: false, error: action.payload }
+      
+      default:
+        return state
+    }
+  }

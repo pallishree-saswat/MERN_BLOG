@@ -19,16 +19,19 @@ const SinglePost = ({history,match}) => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  const commentPost = useSelector((state) => state.commentPost)
+  const { success:commentSuccess,error:commentError,loading:commentLoading } = commentPost
+  const commentDeletePost = useSelector((state) => state.commentDeletePost)
+  const { success:commentDeleteSuccess } = commentDeletePost
+
 
 useEffect(() => {
-
-
-    if (!userInfo) {
+  if (!userInfo) {
       history.push('/login')
     }
  dispatch( PostDetails(match.params.id))
 
-  },[dispatch, match])
+  },[dispatch, match, commentSuccess,commentDeletePost])
 
 return (
     <>
@@ -47,7 +50,7 @@ return (
 <CommentForm postId={post._id} />
       <div className="comments">
         {post.comments.map((comment) => (
-          <AllComments key={comment._id} comment={comment} postId={post._id} />
+          <AllComments key={comment._id} comment={comment} postId={post._id} commentId={comment._id} />
         ))}
       </div>
   

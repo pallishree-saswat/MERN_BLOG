@@ -9,6 +9,7 @@ import user from './routes/user.js'
 import post from './routes/post.js'
 
 
+
 dotenv.config()
 
 connectDB();
@@ -24,7 +25,8 @@ app.use('/api/post', post)
 
 
 
-const __dirname = path.resolve()
+
+
 
 
 

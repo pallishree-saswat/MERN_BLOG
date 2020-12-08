@@ -25,9 +25,42 @@ import {
     USER_UPDATE_SUCCESS,
     USER_UPDATE_FAIL,
     
+    
   } from '../constants/userConstants'
 
   import axios from 'axios'
+  import setAuth from '../utils/setAuth'
+
+
+  export const loadUser = () => async dispatch => {
+    dispatch({type: 'USER_LOAD_REQUEST'})
+    if(localStorage.userInfo.token) {
+      setAuth(localStorage.userInfo.token) //if there is token put that token into global headers
+    }
+  
+  try {
+
+   
+    const res = await axios.get(`api/user`);
+  
+    dispatch({
+      type:'USER_LOADED',
+      payload:res.data
+    })
+  } catch (err) {
+    console.log('user err',err)
+    dispatch({
+      type: 'USER_LOAD_FAIL'
+    })
+    
+  }
+  
+  
+  }
+
+
+
+
 
 
   export const login = (email, password) => async (dispatch) => {
@@ -54,6 +87,7 @@ import {
       })
   
       localStorage.setItem('userInfo', JSON.stringify(data))
+     
     } catch (error) {
       dispatch({
         type: USER_LOGIN_FAIL,

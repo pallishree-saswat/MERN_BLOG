@@ -1,26 +1,33 @@
 import React, { useState } from 'react';
-import { Form, TextArea } from 'react-bootstrap'
-import { addComment } from '../actions/postAction';
-const CommentForm = ({postId, addComment}) => {
+import { Form, FormControl} from 'react-bootstrap'
+import { addComments } from '../actions/postAction';
+import { useDispatch } from 'react-redux'
+import FormContainer from './FormContainer'
+
+
+const CommentForm = ({postId}) => {
 
   const [text, setText] = useState('');
+  const dispatch = useDispatch()
+
     return (
-        <div className='post-form'>
-     
+     <div className='post-form'>
+      
         <h6> Comment  here....</h6>
       
       <Form
         className='form my-1'
         onSubmit={e => {
           e.preventDefault();
-          addComment(postId, { text });
+         dispatch(addComments(postId,{text}));
+         console.log(text)
           setText('');
         }}
       >
-        <textarea
+        <FormControl
+          as='textarea'
           name='text'
           cols='30'
-          rows='5'
           placeholder='comment here...'
           value={text}
           onChange={e => setText(e.target.value)}
@@ -28,6 +35,7 @@ const CommentForm = ({postId, addComment}) => {
         />
         <input type='submit' className='btn btn-dark my-1' value='Submit' />
       </Form>
+  
     </div>
     )
 }

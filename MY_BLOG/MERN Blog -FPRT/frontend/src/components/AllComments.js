@@ -1,20 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { connect, useDispatch , useSelector } from 'react-redux';
+import {  useDispatch , useSelector } from 'react-redux';
+import Message from './Message'
+import Loader from './Loader'
 
-import { deleteComment } from '../actions/postAction';
+import {deleteMyComment } from '../actions/postAction';
 
 const AllComments = ({  postId,
-    comment: { _id, text, name, pic, user, date },
-    auth,
-    deleteComment
-  }) => {
- 
-  
+    comment: { _id, text, name, pic, user, date }
+}) => {
+
+  const dispatch = useDispatch()
+
     const userLogin = useSelector((state) => state.userLogin)
     const { userInfo } = userLogin
+    
+    const commentPost = useSelector((state) => state.commentPost)
+    const { success,error,loading } = commentPost
+  
+     
+
+
     return (
+      <>
+      
         <div className='p-1 my-1'>
         <div>
           <Link to={`/user/${user}`}>
@@ -30,7 +40,7 @@ const AllComments = ({  postId,
        <div>
        { user === userInfo._id && (
             <button
-              onClick={() => deleteComment(postId, _id)}
+            onClick={() => dispatch(deleteMyComment(postId, _id))}
               type='button'
               className='btn btn-danger'
             >
@@ -40,9 +50,10 @@ const AllComments = ({  postId,
        </div>
         </div>
       </div>
+      </>
     )
 }
 
 
 
-export default  connect(null, {deleteComment})  (AllComments)
+export default  AllComments

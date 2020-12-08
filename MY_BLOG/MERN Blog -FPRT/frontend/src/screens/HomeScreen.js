@@ -7,16 +7,25 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {allPosts } from '../actions/postAction'
 
-const HomeScreen = () => {
+const HomeScreen = ({history}) => {
 
  const dispatch = useDispatch()  
+ 
+const userLogin = useSelector((state) => state.userLogin)
+const { userInfo } = userLogin
  
  const  getPosts = useSelector(state => state. getPosts)
  const {loading, error,posts } =  getPosts
 
+
+
 useEffect(() => {
+    
+    if (!userInfo) {
+        history.push('/login')
+      }
 dispatch(allPosts())
-},[dispatch])
+},[dispatch,userInfo])
    
     return (
         <>

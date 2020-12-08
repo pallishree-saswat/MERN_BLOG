@@ -1,6 +1,10 @@
 import asyncHandler from 'express-async-handler'
 import Post from '../model/Post.js'
 import User from '../model/User.js'
+
+
+
+
 //@route GET api/posts
 //description get all posts 
 //@access private
@@ -19,11 +23,13 @@ const getAllPost = asyncHandler(async (req,res)=>{
 //@access private
 const createPost = asyncHandler(async (req,res) => {
     try {
- const user = await User.findById(req.user.id).select('-password');
-        const { title , description} = req.body;
+       const user = await User.findById(req.user.id).select('-password');
+        const { title , description, imgUrl} = req.body;
+
          const newPost = await new Post({
             title,
             description,
+            imgUrl,
             name:user.name,
             user:req.user.id
          })
@@ -137,7 +143,7 @@ const myPost = asyncHandler(async(req,res) => {
 //@route PUT api/posts/like/:id
 //description like a post 
 //@access private
-const likePost = asyncHandler(async (req,res) => {
+const likePost = asyncHandler( async (req,res) => {
   try {
     const post = await Post.findById(req.params.id);
 
@@ -195,7 +201,7 @@ const unlikePost= asyncHandler(async (req,res) => {
 //@route POST api/posts/comment/:id
 //description comment on a post 
 //@access private
-const addComment =  async (req,res) => {
+const addComment =  asyncHandler(async(req,res) => {
 
 try {
   const user = await User.findById(req.user.id).select('-password');
@@ -220,13 +226,17 @@ try {
     
 }
 
-}
+})
+
+
+
+
 
 //@route POST api/posts/comment/:id/:comment_id
 //description delete comment
 //@access private
 
-const deleteComment = async (req, res) => {
+const deleteComment = asyncHandler(async (req, res) => {
   try {
       const post = await Post.findById(req.params.id);
    
@@ -259,7 +269,7 @@ const deleteComment = async (req, res) => {
       res.status(500).send('Server error ')
       
   }
-}
+})
 
 
 

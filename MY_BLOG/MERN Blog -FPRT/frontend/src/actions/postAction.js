@@ -22,8 +22,11 @@ POST_LIST_RESET,
  POST_UNLIKE_SUCCESS,
  POST_UNLIKE_FAIL,
  ADD_COMMENT,
-
- REMOVE_COMMENT
+ ADD_COMMENT_FAIL,
+REMOVE_COMMENT,
+DELETE_COMMENT_FAIL,
+ADD_COMMENT_REQUEST,
+REMOVE_COMMENT_REQUEST,
 } from '../constants/postConstants'
 
 import axios from 'axios'
@@ -127,7 +130,7 @@ export const deleteMyPost = id => async( dispatch,getState )=> {
         },
       }
   
-      const { data } = await axios.post(`/api/post/`, {title,description}, config)
+      const { data } = await axios.post(`/api/post/`,{title,description}, config)
   
       dispatch({
         type: POST_CREATE_SUCCESS,
@@ -184,19 +187,9 @@ export const deleteMyPost = id => async( dispatch,getState )=> {
  
 
   // Add like
-export const addLike = (id) => async (getState, dispatch )=> {
+// Add like
+export const addLike = id => async dispatch => {
   try {
- 
-    const {
-      userLogin: { userInfo },
-    } = getState()
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
     const res = await axios.put(`api/post/like/${id}`);
 
     dispatch({
@@ -204,10 +197,13 @@ export const addLike = (id) => async (getState, dispatch )=> {
       payload: { id, likes: res.data }
     });
   } catch (err) {
-console.log(err)
-dispatch({type : POST_LIKE_FAIL})
+    dispatch({
+      type: POST_LIKE_FAIL,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
   }
 };
+
 
 
 // Remove like
@@ -230,40 +226,75 @@ export const removeLike = id => async dispatch => {
   }
 };
 
-// Add comment
-export const addComment = (postId, formData) => async dispatch => {
+
+
+export const addComments = (postId,formData) => async (
+  dispatch,
+  getState
+) => {
   try {
-    const res = await axios.post(`api/post/comment/${postId}`, formData);
+  
+    dispatch({
+      type: ADD_COMMENT_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.post(`/api/post/comment/${postId}`, formData, config)
 
     dispatch({
-      type: ADD_COMMENT,
-      payload: res.data
-    });
-
-  } catch (err) {
+      type:ADD_COMMENT,
+    })
+  } catch (error) {
     dispatch({
-      type: POST_DELETE_SUCCESS,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
+      type: ADD_COMMENT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
   }
-};
+}
 
 
-// Delete comment
-export const deleteComment = (postId, commentId) => async dispatch => {
+//delete comment
+export const deleteMyComment = (postId,commentId) => async( dispatch,getState )=> {
   try {
-    await axios.delete(`api/post/comment/${postId}/${commentId}`);
+    dispatch({
+      type: REMOVE_COMMENT_REQUEST,
+    })
+      const {
+        userLogin: { userInfo },
+      } = getState()
+  
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+    await axios.delete(`/api/post/comment/${postId}/${commentId}`,config);
 
     dispatch({
       type: REMOVE_COMMENT,
-      payload: commentId
+      
     });
-
-   
-  } catch (err) {
+  } catch (error) {
     dispatch({
-      type: POST_DELETE_SUCCESS,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
+        type: DELETE_COMMENT_FAIL,
+        payload : 
+        error.response && error.response.data.message 
+        ? error.response.data.message
+        : error.message
+    })
+}
 };
