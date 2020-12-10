@@ -21,14 +21,14 @@ const userLogin = useSelector((state) => state.userLogin)
         <>
     <Card className="my-3 p-3 rounded" >
          <Card.Body>
-              <Link to='/'>
+              <Link to={`/user/${post.user}`}>
                 <Card.Header> posted by {post.name} </Card.Header>
                 </Link>
              
                   <Card.Title as="div">
                      <h3><strong> {post.title }</strong></h3> 
                   </Card.Title>
-                
+                  <Card.Img variant="top" src={post.image} />
                   <Card.Text>
                  {post.description}
                  </Card.Text>

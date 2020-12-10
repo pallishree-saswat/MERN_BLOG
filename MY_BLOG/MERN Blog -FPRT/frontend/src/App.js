@@ -12,10 +12,7 @@ import SinglePost from './screens/SinglePost'
 import EditPostScreen from './screens/EditPostScreen'
 import UserProfile from './screens/UserProfile'
 
-import { loadUser,login, logout} from './actions/userAction';
-import setAuth from './utils/setAuth';
-import store from './store'
-import { useSelector, useDispatch} from 'react-redux'
+
 
 
 
@@ -35,6 +32,7 @@ function App() {
     <Route exact path="/user/:id" component={UserProfile} />
     <Route exact path="/post/:id" component={SinglePost} />
     <Route path='/post/:id/edit' component={EditPostScreen} />
+    <Route path='/search/:keyword' component={HomeScreen} exact />
     </Container>
     </main>
     </Router>

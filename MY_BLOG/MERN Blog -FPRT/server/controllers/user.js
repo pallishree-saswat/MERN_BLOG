@@ -44,7 +44,7 @@ const authUser  = asyncHandler(async(req,res) => {
 
 //get user profile controller
 const getUserProfile = asyncHandler(async(req,res) => {
-    const user = await User.findById(req.user._id).populate('posts',['title','description'])
+    const user = await User.findById(req.user._id).populate('posts',['title','description','image'])
 
         if (user) {
           res.json({
@@ -144,7 +144,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users/:id
 // @access  Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password').populate('posts',['title','description'])
+  const user = await User.findById(req.params.id).select('-password').populate('posts',['title','description','image'])
 
   if (user) {
     res.json(user)

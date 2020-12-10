@@ -7,7 +7,9 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {allPosts } from '../actions/postAction'
 
-const HomeScreen = ({history}) => {
+const HomeScreen = ({history,match}) => {
+    const keyword = match.params.keyword
+
 
  const dispatch = useDispatch()  
  
@@ -24,12 +26,18 @@ useEffect(() => {
     if (!userInfo) {
         history.push('/login')
       }
-dispatch(allPosts())
-},[dispatch,userInfo])
+dispatch(allPosts(keyword))
+},[dispatch,userInfo,keyword])
    
     return (
         <>
-       <h1>Latest Posts</h1>
+        {!keyword  ? 
+          <h1>Latest Posts</h1> : 
+          <Link to='/' className='btn btn-light'>
+          Go Back
+        </Link>
+    }
+      
         {loading ?(
             <Loader />
         )  : error ? (

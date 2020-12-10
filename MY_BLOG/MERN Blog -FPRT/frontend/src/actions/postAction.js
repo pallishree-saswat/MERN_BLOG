@@ -32,14 +32,14 @@ REMOVE_COMMENT_REQUEST,
 import axios from 'axios'
 
 
-export const allPosts = () => async (dispatch) => {
+export const allPosts = (keyword = '') => async (dispatch) => {
     try {
       dispatch({
         type: POST_LIST_REQUEST,
       })
   
 
-      const { data } = await axios.get(`/api/post`)
+      const { data } = await axios.get(`/api/post?keyword=${keyword}`)
   
       dispatch({
         type: POST_LIST_SUCCESS,
@@ -114,7 +114,7 @@ export const deleteMyPost = id => async( dispatch,getState )=> {
 };
 
 
-  export const createPost = ({title,description} ) => async (dispatch, getState) => {
+  export const createPost = ({title,description,image} ) => async (dispatch, getState) => {
     try {
       dispatch({
         type: POST_CREATE_REQUEST,
@@ -130,7 +130,7 @@ export const deleteMyPost = id => async( dispatch,getState )=> {
         },
       }
   
-      const { data } = await axios.post(`/api/post/`,{title,description}, config)
+      const { data } = await axios.post(`/api/post/`,{title,description,image}, config)
   
       dispatch({
         type: POST_CREATE_SUCCESS,

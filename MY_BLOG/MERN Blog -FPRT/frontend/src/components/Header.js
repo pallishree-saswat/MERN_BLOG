@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
 import {LinkContainer } from 'react-router-bootstrap'
 import { logout } from '../actions/userAction'
+import SearchBox from './SearchBox'
 
 const Header = () => {
 
@@ -25,7 +26,7 @@ const logoutHandler = () => {
           </Link>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
-       
+          <Route render={({ history }) => <SearchBox history={history} />} />
             <Nav className="ml-auto">
             {
               userInfo ? (

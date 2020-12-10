@@ -31,11 +31,12 @@ const dispatch = useDispatch();
             
                 <Card.Header>{userInfo.name} </Card.Header>
        
-             
+                
                 <Link to={`/post/${post._id}`}>
                   <Card.Title as="div">
                       <strong> {post.title }</strong>
                   </Card.Title>
+                 <Card.Img variant="top" src={post.image} />
                   </Link>
                   <Card.Text>
                  {post.description}

@@ -36,15 +36,11 @@ const { userInfo } = userLogin
                       <strong> {post.title }</strong>
                   </Card.Title>
                   </Link>
+                  <Card.Img variant="top" src={post.image} />
                   <Card.Text>
                  {post.description}
                  </Card.Text>
-
-             
-
-           
-
-          </Card.Body>
+      </Card.Body>
 
       </Card>
            

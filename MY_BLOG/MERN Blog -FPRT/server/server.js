@@ -7,7 +7,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 
 import user from './routes/user.js'
 import post from './routes/post.js'
-
+import uploadRoutes from './routes/uploadRoute.js'
 
 
 dotenv.config()
@@ -22,11 +22,7 @@ app.use(express.json())
 
 app.use('/api/user', user)
 app.use('/api/post', post)
-
-
-
-
-
+app.use('/api/upload', uploadRoutes)
 
 
 
@@ -34,7 +30,8 @@ app.use('/api/post', post)
     res.send('API is running....')
   })
 
-
+  const __dirname = path.resolve()
+  app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 app.use(notFound)
 app.use(errorHandler)

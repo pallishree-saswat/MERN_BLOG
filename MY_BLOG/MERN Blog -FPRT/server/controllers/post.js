@@ -10,7 +10,16 @@ import User from '../model/User.js'
 //@access private
 const getAllPost = asyncHandler(async (req,res)=>{
     try {
-       const posts = await Post.find().sort({ date : -1}) 
+      const keyword = req.query.keyword
+      ? {
+          title: {
+            $regex: req.query.keyword,
+            $options: 'i',
+          },
+        }
+      : {}
+      const count = await Post.countDocuments({ ...keyword })
+       const posts = await Post.find({...keyword}).sort({ date : -1}) 
        res.json(posts)
     } catch (err) {
         console.log(err.message);
@@ -24,12 +33,12 @@ const getAllPost = asyncHandler(async (req,res)=>{
 const createPost = asyncHandler(async (req,res) => {
     try {
        const user = await User.findById(req.user.id).select('-password');
-        const { title , description, imgUrl} = req.body;
+        const { title , description, image} = req.body;
 
          const newPost = await new Post({
             title,
             description,
-            imgUrl,
+            image,
             name:user.name,
             user:req.user.id
          })
@@ -107,6 +116,7 @@ const deletePost = asyncHandler(async (req,res)=>{
     const {
       title,
       description,
+      image
   
     } = req.body
   
@@ -115,6 +125,7 @@ const deletePost = asyncHandler(async (req,res)=>{
     if (post) {
       post.title = title
       post.description = description
+      post.image = image
     
     
   
@@ -138,64 +149,6 @@ const myPost = asyncHandler(async(req,res) => {
     })
 })
 
-
-
-//@route PUT api/posts/like/:id
-//description like a post 
-//@access private
-const likePost = asyncHandler( async (req,res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-
-    //check if the post has already been liked
-    if(post.likes.filter(like => like.user.toString() === req.user.id).length > 0) 
-    {
-       return res.status(400).json({msg :" post already liked"})
-    }
-
-    post.likes.unshift({ user : req.user.id})
-
-    await post.save();
-    res.json(post.likes)
-
-
-  } catch (err) {
-      console.log(err.message)
-  res.status(500).send('Server error')        
-  }
-})
-
-
-//@route PUT api/posts/unlike/:id
-//description like a post 
-//@access private
-const unlikePost= asyncHandler(async (req,res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-
-    //check if the post has already been liked
-    if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0) 
-    {
-       return res.status(400).json({msg :" post has not yet been liked"})
-    }
-
-   //get remove index 
-   const removeIndex = post.likes
-   .map(like => like.user.toString())
-   .indexOf(req.user.id);
-
-   post.likes.splice(removeIndex, 1)
-
-    await post.save();
-    
-    res.json(post.likes)
-
-
-  } catch (err) {
-      console.log(err.message)
-  res.status(500).send('Server error')        
-  }
-})
 
 
 //@route POST api/posts/comment/:id
@@ -253,7 +206,7 @@ const deleteComment = asyncHandler(async (req, res) => {
        return res.status(401).json({msg : 'User not found'})
    }
 
-         //get remove index 
+    //get remove index 
    const removeIndex = post.comments
    .map(comment => comment.user.toString())
    .indexOf(req.user.id);
@@ -275,4 +228,4 @@ const deleteComment = asyncHandler(async (req, res) => {
 
 
 
-  export { getAllPost,singlePost,createPost,deletePost,updatePost ,myPost, likePost, unlikePost, addComment, deleteComment}
+  export { getAllPost,singlePost,createPost,deletePost,updatePost ,myPost,  addComment, deleteComment}
